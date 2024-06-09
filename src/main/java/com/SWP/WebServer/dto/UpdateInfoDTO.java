@@ -1,42 +1,24 @@
 package com.SWP.WebServer.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateInfoDTO {
-    private String phone;
-    private boolean gender;
-    private Date dob;
-
-    public UpdateInfoDTO() {
-    }
-
-    public UpdateInfoDTO(String phone, boolean gender, Date dob) {
-        this.phone = phone;
-        this.gender = gender;
-        this.dob = dob;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
+    private int id;
+    private String city;
+    private String state;
+    private String first_name;
+    private String last_name;
+    private String user_name;
+    private String occupation;
+    private String intro;
+    private String email;
+    private String resume_url;
 }

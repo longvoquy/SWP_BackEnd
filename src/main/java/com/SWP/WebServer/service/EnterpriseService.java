@@ -26,11 +26,11 @@ public class EnterpriseService {
     int strength = 10;
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
 
-
-    //--Ham gui lai mail verify--//
+    // --Ham gui lai mail verify--//
     public void reverify(String email) {
         try {
-            String htmlContent = emailTemplateService.getVerifyMailTemplateEn("Tap the button below to confirm your email address",
+            String htmlContent = emailTemplateService.getVerifyMailTemplateEn(
+                    "Tap the button below to confirm your email address",
                     "Verify", email);
             emailService.sendMail(email, "Verify email", htmlContent);
         } catch (Exception e) {
@@ -39,12 +39,12 @@ public class EnterpriseService {
 
     }
 
-    //--Ham tim User bang Email--//
+    // --Ham tim User bang Email--//
     public Enterprise findEnterpriseByEmail(String email) {
         return enterpriseRepository.findByEmail(email);
     }
 
-    //--Ham signup--//
+    // --Ham signup--//
     public Enterprise signup(SignupEDTO en) {
         String enterprise_name = en.getEnterprise_name();
         String email = en.getEmail().toLowerCase();
@@ -53,19 +53,21 @@ public class EnterpriseService {
             throw new ApiRequestException("Email already exist", HttpStatus.BAD_REQUEST);
         }
         try {
-            String htmlContent = emailTemplateService.getVerifyMailTemplateEn("Tap the button below to confirm your email address",
+            String htmlContent = emailTemplateService.getVerifyMailTemplateEn(
+                    "Tap the button below to confirm your email address",
                     "Verify", email);
             emailService.sendMail(email, "Verify email", htmlContent);
         } catch (Exception e) {
             throw new ApiRequestException("Failed to send mail", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        Enterprise newEnterprise = enterpriseRepository.save(new Enterprise(enterprise_name, email, password, "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg", null, 0));
+        Enterprise newEnterprise = enterpriseRepository.save(new Enterprise(enterprise_name, email, password,
+                "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg", null, 0));
         newEnterprise.setPassword("");
         return newEnterprise;
     }
 
-    //--Ham update bang verify email--//
+    // --Ham update bang verify email--//
     public Enterprise updateVerifyEmail(String token) {
         String email = "";
         try {
@@ -78,10 +80,11 @@ public class EnterpriseService {
         return enterpriseRepository.save(enterprise);
     }
 
-    //--Ham reset password--//
+    // --Ham reset password--//
     public void resetPassword(ResetPasswordDTO body) {
-        String email = body.getemail().toLowerCase();
-        String html = emailTemplateService.getResetPasswordMailTemplateForEn("Click here to reset password", "Reset password", email);
+        String email = body.getEmail().toLowerCase();
+        String html = emailTemplateService.getResetPasswordMailTemplateForEn("Click here to reset password",
+                "Reset password", email);
         try {
             emailService.sendMail(email, "Reset password", html);
         } catch (Exception e) {
@@ -112,13 +115,14 @@ public class EnterpriseService {
             return EnExist;
         }
         enterpriseRepository.save(
-                new Enterprise(enterprise.getName(), enterprise.getEmail().toLowerCase(), null, enterprise.getPicture(), enterprise.getS_id(), 1));
+                new Enterprise(enterprise.getName(), enterprise.getEmail().toLowerCase(), null, enterprise.getPicture(),
+                        enterprise.getS_id(), 1));
         Enterprise createdEnterprise = enterpriseRepository.findBySid(enterprise.getS_id());
         return createdEnterprise;
     }
 
     public Enterprise login(LoginDTO body) {
-        String email = body.getemail().toLowerCase();
+        String email = body.getEmail().toLowerCase();
         Enterprise enterprise = enterpriseRepository.findByEmailAndSid(email, null);
         if (enterprise == null) {
             throw new ApiRequestException("Email not found", HttpStatus.BAD_REQUEST);
@@ -152,6 +156,7 @@ public class EnterpriseService {
         enterprise.setPassword(bCryptPasswordEncoder.encode(newPassword));
         enterpriseRepository.save(enterprise);
     }
+
     public Enterprise updateProfile(UpdateProfileEnDTO body, String enterpriseId) {
 
         String Newenterprise_name = body.getPenterprise_name();
@@ -159,11 +164,13 @@ public class EnterpriseService {
         enterprise.setEnterprise_name(Newenterprise_name);
         return enterpriseRepository.save(enterprise);
     }
+
     public void updateAvatar(String url, String enterpriseId) {
         Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(enterpriseId));
         enterprise.setAvatar_url(url);
         enterpriseRepository.save(enterprise);
     }
+
     public Enterprise updateInfo(UpdateInfoEnDTO body, String enterpriseId) {
         String newPhone = body.getPhone();
         String newLocation = body.getLocation();
@@ -177,4 +184,3 @@ public class EnterpriseService {
         return enterpriseRepository.save(enterprise);
     }
 }
-

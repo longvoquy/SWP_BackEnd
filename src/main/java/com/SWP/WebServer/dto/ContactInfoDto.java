@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateProfileDTO {
-    private String puser_name;
-
+@NoArgsConstructor
+public class ContactInfoDto {
+    private String web_url;
+    private String phone;
 }

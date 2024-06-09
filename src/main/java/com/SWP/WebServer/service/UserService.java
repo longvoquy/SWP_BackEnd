@@ -3,6 +3,7 @@ package com.SWP.WebServer.service;
 import com.SWP.WebServer.dto.*;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
+import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.token.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class UserService {
 
     //--Ham reset password--//
     public void resetPassword(ResetPasswordDTO body) {
-        String email = body.getemail().toLowerCase();
+        String email = body.getEmail().toLowerCase();
         String html = emailTemplateService.getResetPasswordMailTemplate("Click here to reset password", "Reset password", email);
         try {
             emailService.sendMail(email, "Reset password", html);
@@ -102,9 +103,9 @@ public class UserService {
         if (user == null) {
             throw new ApiRequestException("User not found!", HttpStatus.BAD_REQUEST);
         }
+
         user.setPassword(bCryptPasswordEncoder.encode(body.getNewPassword()));
         userRepository.save(user);
-
     }
 
     public User saveSocialUser(LoginSocialDTO user) {
@@ -113,13 +114,14 @@ public class UserService {
             return userExist;
         }
         userRepository.save(
-                new User(user.getName(), user.getEmail().toLowerCase(), null, user.getPicture(), user.getS_id(), 1));
+                new
+                        User(user.getName(), user.getEmail().toLowerCase(), null, user.getPicture(), user.getS_id(), 1));
         User createdUser = userRepository.findBySid(user.getS_id());
         return createdUser;
     }
 
     public User login(LoginDTO body) {
-        String email = body.getemail().toLowerCase();
+        String email = body.getEmail().toLowerCase();
         User user = userRepository.findByEmailAndSid(email, null);
         if (user == null) {
             throw new ApiRequestException("Email not found", HttpStatus.BAD_REQUEST);
@@ -140,7 +142,28 @@ public class UserService {
         return user;
     }
 
-    public void updatePassword(UpdatePasswordDTO body, String userId) {
+    public User updateContactInfo(
+            ContactInfoDto body,
+            String userId) {
+        User user = userRepository.findById(Integer.parseInt(userId));
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
+
+        // Update contact information
+        if (body.getWeb_url() != null) {
+            user.setWeb_url(body.getWeb_url());
+        }
+        if (body.getPhone() != null) {
+            user.setPhone(body.getPhone());
+        }
+
+        return userRepository.save(user);
+    }
+
+    public void updatePassword(
+            UpdatePasswordDTO body,
+            String userId) {
         String newPassword = body.getNewPassword();
         String oldPassword = body.getOldPassword();
         User user = userRepository.findById(Integer.parseInt(userId));
@@ -150,12 +173,16 @@ public class UserService {
         if (!bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
             throw new ApiRequestException("old password wrong", HttpStatus.BAD_REQUEST);
         }
+
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         userRepository.save(user);
 
     }
 
-    public User updateProfile(UpdateProfileDTO body, String userId) {
+
+    public User updateProfile(
+            UpdateProfileDTO body,
+            String userId) {
 
         String puser_name = body.getPuser_name();
         User user = userRepository.findById(Integer.parseInt(userId));
@@ -163,22 +190,82 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateAvatar(String url, String userId) {
+
+    public User updateInfo(
+            UpdateInfoDTO body,
+            String userId) {
+        int id = Integer.parseInt(userId);
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
+
+        // Update city if not null
+        if (body.getCity() != null) {
+            user.setCity(body.getCity());
+        }
+
+        // Update state if not null
+        if (body.getState() != null) {
+            user.setState(body.getState());
+        }
+
+        // Update first_name if not null
+        if (body.getFirst_name() != null) {
+            user.setFirst_name(body.getFirst_name());
+        }
+
+        // Update last_name if not null
+        if (body.getLast_name() != null) {
+            user.setLast_name(body.getLast_name());
+        }
+
+        // Update user_name if not null
+        if (body.getUser_name() != null) {
+            user.setUser_name(body.getUser_name());
+        }
+
+        // Update occupation if not null
+        if (body.getOccupation() != null) {
+            user.setOccupation(body.getOccupation());
+        }
+
+        // Update intro if not null
+        if (body.getIntro() != null) {
+            user.setIntro(body.getIntro());
+        }
+
+        // Update email if not null
+        if (body.getEmail() != null) {
+            user.setEmail(body.getEmail());
+        }
+
+        // Update resume_url if not null
+//        if (body.getResume_url() != null) {
+//            user.setResume_url(body.getResume_url());
+//        }
+
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(String userId) {
+        User user = userRepository.findById(Integer.parseInt(userId));
+        userRepository.delete(user);
+    }
+
+    public void updateAvatar(
+            String url,
+            String userId) {
         User user = userRepository.findById(Integer.parseInt(userId));
         user.setAvatar_url(url);
         userRepository.save(user);
     }
 
-    public User updateInfo(UpdateInfoDTO body, String userId) {
-        String newPhone = body.getPhone();
-        Date newDOB = body.getDob();
-        Boolean newGender = body.isGender();
+    public void updateResume(
+            String url,
+            String userId) {
         User user = userRepository.findById(Integer.parseInt(userId));
-        user.setPhone(newPhone);
-        user.setDob(newDOB);
-        user.setGender(newGender);
-        return userRepository.save(user);
+        user.setResume_url(url);
+        userRepository.save(user);
     }
-
-
 }
