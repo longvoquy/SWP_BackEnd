@@ -22,11 +22,11 @@ public class CVApply {
     private String description;
     private byte isApllied;
 
-    @OneToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(
-            name = "user_id",
+            name = "userId",
             referencedColumnName = "id"
     )
     private User user;
@@ -36,7 +36,7 @@ public class CVApply {
     )
 
     @JoinColumn(
-            name ="enterprise_id",
+            name ="eid",
             referencedColumnName = "eid"
     )
     private Enterprise enterprise;
