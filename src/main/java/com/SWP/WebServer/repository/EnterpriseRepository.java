@@ -3,12 +3,11 @@ package com.SWP.WebServer.repository;
 import com.SWP.WebServer.entity.Enterprise;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Integer> {
-    Enterprise findById(int e_id);
+    Enterprise findByEid(int e_id);
 
     Enterprise findByEmail(String email);
 

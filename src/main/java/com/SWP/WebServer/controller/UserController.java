@@ -1,9 +1,12 @@
 package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.*;
+import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
+import com.SWP.WebServer.service.CVService;
+import com.SWP.WebServer.service.CVServiceImpl;
 import com.SWP.WebServer.service.CloudinaryService;
 import com.SWP.WebServer.service.UserService;
 import com.SWP.WebServer.token.JwtTokenProvider;
@@ -28,6 +31,8 @@ public class UserController {
     JwtTokenProvider jwtTokenProvider;
     @Autowired
     CloudinaryService cloudinaryService;
+    @Autowired
+    CVService cvService;
 
     @PostMapping("/signup")
     public User create(@RequestBody SignupDTO body) {
@@ -63,7 +68,7 @@ public class UserController {
 
     @PostMapping("/reverify")
     public ResponseEntity<?> reverify(@RequestBody ReverifyDTO body) {
-        userService.reverify(body.getemail());
+        userService.reverify(body.getEmail());
         return ResponseEntity.ok("Reverification email sent successfully.");
 
     }
@@ -74,6 +79,15 @@ public class UserController {
         String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
         LoginResponse response = new LoginResponse(token, user.getRole());
         return response;
+    }
+
+    @PostMapping("/apply-cv/{eid}")
+    public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
+            @RequestHeader("Authorization") String token,
+            @PathVariable("eid") int eid){
+        String userId  = getUserIdFromToken(token);
+        CVApply cvApply = cvService.applyCV(body, userId,eid);
+        return ResponseEntity.ok(cvApply);
     }
 
     @PatchMapping("/change-password")

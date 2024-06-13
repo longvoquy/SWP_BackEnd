@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.Date;
 
 @Service
 public class EnterpriseService {
@@ -139,14 +138,14 @@ public class EnterpriseService {
     }
 
     public Enterprise getEnterpriseProfile(String id) {
-        Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(id));
+        Enterprise enterprise = enterpriseRepository.findByEid(Integer.parseInt(id));
         return enterprise;
     }
 
     public void updatePassword(UpdatePasswordDTO body, String enterpriseId) {
         String newPassword = body.getNewPassword();
         String oldPassword = body.getOldPassword();
-        Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(enterpriseId));
+        Enterprise enterprise = enterpriseRepository.findByEid(Integer.parseInt(enterpriseId));
         if (enterprise == null) {
             throw new ApiRequestException("User not found", HttpStatus.BAD_REQUEST);
         }
@@ -160,13 +159,13 @@ public class EnterpriseService {
     public Enterprise updateProfile(UpdateProfileEnDTO body, String enterpriseId) {
 
         String Newenterprise_name = body.getPenterprise_name();
-        Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(enterpriseId));
+        Enterprise enterprise = enterpriseRepository.findByEid(Integer.parseInt(enterpriseId));
         enterprise.setEnterprise_name(Newenterprise_name);
         return enterpriseRepository.save(enterprise);
     }
 
     public void updateAvatar(String url, String enterpriseId) {
-        Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(enterpriseId));
+        Enterprise enterprise = enterpriseRepository.findByEid(Integer.parseInt(enterpriseId));
         enterprise.setAvatar_url(url);
         enterpriseRepository.save(enterprise);
     }
@@ -175,8 +174,8 @@ public class EnterpriseService {
         String newPhone = body.getPhone();
         String newLocation = body.getLocation();
         String newEn_position = body.getEn_position();
-        String newTaxcode = body.getTaxcode();
-        Enterprise enterprise = enterpriseRepository.findById(Integer.parseInt(enterpriseId));
+        String newTaxcode = body.getTaxCode();
+        Enterprise enterprise = enterpriseRepository.findByEid(Integer.parseInt(enterpriseId));
         enterprise.setPhone(newPhone);
         enterprise.setLocation(newLocation);
         enterprise.setEn_position(newEn_position);

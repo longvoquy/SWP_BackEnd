@@ -55,7 +55,7 @@ public class EnterpriseController {
 
     @PostMapping("/reverify")
     public ResponseEntity<?> reverify(@RequestBody ReverifyDTO body) {
-        enterpriseService.reverify(body.getemail());
+        enterpriseService.reverify(body.getEmail());
         return ResponseEntity.ok("Reverification email sent successfully.");
     }
 
