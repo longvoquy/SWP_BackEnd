@@ -76,7 +76,7 @@ public class UserService {
         String password = bCryptPasswordEncoder.encode(user.getPassword());
         int roleTypeId = user.getUserTypeId();
         if (userRepository.findByEmail(email) != null) {
-            throw new ApiRequestException("Email already exist in this role", HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("Email already exist", HttpStatus.BAD_REQUEST);
         }
         try {
             String htmlContent = emailTemplateService.getVerifyMailTemplate("Tap the button below to confirm your email address",
