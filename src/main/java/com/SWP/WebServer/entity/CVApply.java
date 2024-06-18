@@ -27,7 +27,7 @@ public class CVApply {
     )
     @JoinColumn(
             name = "userId",
-            referencedColumnName = "id"
+            referencedColumnName = "uid"
     )
     private User user;
 

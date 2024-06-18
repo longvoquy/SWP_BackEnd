@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -39,13 +40,13 @@ public class UserController {
         return userService.signup(body);
     }
 
-    @PostMapping("/social")
-    public LoginResponse loginSocial(@RequestBody LoginSocialDTO body) {
-        User user = userService.saveSocialUser(body);
-        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
-        LoginResponse response = new LoginResponse(token, user.getRole());
-        return response;
-    }
+//    @PostMapping("/social")
+//    public LoginResponse loginSocial(@RequestBody LoginSocialDTO body) {
+//        User user = userService.saveSocialUser(body);
+//        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
+//        LoginResponse response = new LoginResponse(token, user.getRole());
+//        return response;
+//    }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO body) {
@@ -73,13 +74,13 @@ public class UserController {
 
     }
 
-    @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginDTO body) {
-        User user = userService.login(body);
-        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
-        LoginResponse response = new LoginResponse(token, user.getRole());
-        return response;
-    }
+//    @PostMapping("/login")
+//    public LoginResponse login(@RequestBody LoginDTO body) {
+//        User user = userService.login(body);
+//        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
+//        LoginResponse response = new LoginResponse(token, user.getRole());
+//        return response;
+//    }
 
     @PostMapping("/apply-cv/{eid}")
     public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
@@ -144,27 +145,27 @@ public class UserController {
         return userService.updateProfile(body, userId);
     }
 
-    @PatchMapping("/update-info")
-    public ResponseEntity<?> updateUserInfo(
-            @RequestBody UpdateInfoDTO updateInfoDTO,
-            @RequestParam(value = "resume", required = false) MultipartFile resume,
-            @RequestHeader("Authorization") String token) {
-        String userId = getUserIdFromToken(token);
-
-        // if (resume != null && !resume.isEmpty()) {
-        // try {
-        // Map<String, String> data = cloudinaryService.upload(resume);
-        // String resumeUrl = data.get("url");
-        // updateInfoDTO.setResume_url(resumeUrl);
-        // } catch (Exception e) {
-        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        // .body("Failed to upload resume: " + e.getMessage());
-        // }
-        // }
-
-        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
-        return ResponseEntity.ok(updatedUser);
-    }
+//    @PatchMapping("/update-info")
+//    public ResponseEntity<?> updateUserInfo(
+//            @RequestBody UpdateInfoDTO updateInfoDTO,
+//            @RequestParam(value = "resume", required = false) MultipartFile resume,
+//            @RequestHeader("Authorization") String token) throws IOException {
+//        String userId = getUserIdFromToken(token);
+//
+//        // if (resume != null && !resume.isEmpty()) {
+//        // try {
+//        // Map<String, String> data = cloudinaryService.upload(resume);
+//        // String resumeUrl = data.get("url");
+//        // updateInfoDTO.setResume_url(resumeUrl);
+//        // } catch (Exception e) {
+//        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//        // .body("Failed to upload resume: " + e.getMessage());
+//        // }
+//        // }
+//
+//        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
+//        return ResponseEntity.ok(updatedUser);
+//    }
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(

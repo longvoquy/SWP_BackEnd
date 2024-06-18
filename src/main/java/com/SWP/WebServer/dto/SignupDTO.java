@@ -11,5 +11,5 @@ public class SignupDTO {
     private String user_name;
     private String email;
     private String password;
-
+    private int userTypeId;
 }

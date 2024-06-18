@@ -24,7 +24,7 @@ public class CVServiceImpl implements CVService {
 
     @Override
     public CVApply applyCV(AppliedCVDto body, String userId, int eid) {
-        User user = userRepository.findById(Integer.parseInt(userId));
+        User user = userRepository.findByUid(Integer.parseInt(userId));
         Enterprise enterprise = enterpriseRepository.findByEid(eid);
 
         if (user == null || enterprise == null) {
