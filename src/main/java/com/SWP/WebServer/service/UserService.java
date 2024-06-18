@@ -75,7 +75,7 @@ public class UserService {
         String email = user.getEmail().toLowerCase();
         String password = bCryptPasswordEncoder.encode(user.getPassword());
         int roleTypeId = user.getUserTypeId();
-        if (userRepository.findByEmailAndRoleType_RoleTypeId(email, roleTypeId) != null) {
+        if (userRepository.findByEmail(email) != null) {
             throw new ApiRequestException("Email already exist in this role", HttpStatus.BAD_REQUEST);
         }
         try {

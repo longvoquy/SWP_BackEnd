@@ -74,13 +74,13 @@ public class UserController {
 
     }
 
-//    @PostMapping("/login")
-//    public LoginResponse login(@RequestBody LoginDTO body) {
-//        User user = userService.login(body);
-//        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
-//        LoginResponse response = new LoginResponse(token, user.getRole());
-//        return response;
-//    }
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginDTO body) {
+        User user = userService.login(body);
+        String token = jwtTokenProvider.generateAccessToken(user.getUid() + "");
+        LoginResponse response = new LoginResponse(token, user.getRoleType().getRoleTypeName());
+        return response;
+    }
 
     @PostMapping("/apply-cv/{eid}")
     public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
