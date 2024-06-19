@@ -5,10 +5,7 @@ import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
-import com.SWP.WebServer.service.CVService;
-import com.SWP.WebServer.service.CVServiceImpl;
-import com.SWP.WebServer.service.CloudinaryService;
-import com.SWP.WebServer.service.UserService;
+import com.SWP.WebServer.service.*;
 import com.SWP.WebServer.token.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +25,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    JobSeekerService jobSeekerService;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
     @Autowired
@@ -133,7 +132,7 @@ public class UserController {
             @RequestBody ContactInfoDto body,
             @RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
-        userService.updateContactInfo(body, userId);
+        jobSeekerService.updateContactInfo(body, userId);
         return ResponseEntity.ok("Update contact successfully");
     }
 
@@ -167,27 +166,27 @@ public class UserController {
 //        return ResponseEntity.ok(updatedUser);
 //    }
 
-    @PatchMapping("/update-avatar")
-    public ResponseEntity<?> updateAvatar(
-            @RequestParam("image") MultipartFile file,
-            @RequestHeader("Authorization") String token) {
-        String userId = getUserIdFromToken(token);
-        Map<String, String> data = cloudinaryService.upload(file);
-        String url = data.get("url");
-        userService.updateAvatar(url, userId);
-        return ResponseEntity.ok("Update avatar successfully");
-    }
+//    @PatchMapping("/update-avatar")
+//    public ResponseEntity<?> updateAvatar(
+//            @RequestParam("image") MultipartFile file,
+//            @RequestHeader("Authorization") String token) {
+//        String userId = getUserIdFromToken(token);
+//        Map<String, String> data = cloudinaryService.upload(file);
+//        String url = data.get("url");
+//        userService.updateAvatar(url, userId);
+//        return ResponseEntity.ok("Update avatar successfully");
+//    }
 
-    @PatchMapping("/update-resume")
-    public ResponseEntity<?> updateResume(
-            @RequestParam(value = "resume", required = false) MultipartFile resume,
-            @RequestHeader("Authorization") String token) {
-        String userId = getUserIdFromToken(token);
-        Map<String, String> data = cloudinaryService.upload(resume);
-        String url = data.get("url");
-        userService.updateResume(url, userId);
-        return ResponseEntity.ok("Update resume successfully");
-    }
+//    @PatchMapping("/update-resume")
+//    public ResponseEntity<?> updateResume(
+//            @RequestParam(value = "resume", required = false) MultipartFile resume,
+//            @RequestHeader("Authorization") String token) {
+//        String userId = getUserIdFromToken(token);
+//        Map<String, String> data = cloudinaryService.upload(resume);
+//        String url = data.get("url");
+//        userService.updateResume(url, userId);
+//        return ResponseEntity.ok("Update resume successfully");
+//    }
 
     @DeleteMapping("/delete-account")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
