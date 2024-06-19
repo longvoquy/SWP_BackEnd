@@ -26,6 +26,7 @@ public class JobSeeker {
     private String first_name;
     private String last_name;
     private String occupation;
+    @Column(columnDefinition = "TEXT")
     private String intro;
     private byte gender;
     private String dob;

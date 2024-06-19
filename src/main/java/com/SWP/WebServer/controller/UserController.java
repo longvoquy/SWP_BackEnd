@@ -2,6 +2,7 @@ package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.*;
 import com.SWP.WebServer.entity.CVApply;
+import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
@@ -144,49 +145,49 @@ public class UserController {
         return userService.updateProfile(body, userId);
     }
 
-//    @PatchMapping("/update-info")
-//    public ResponseEntity<?> updateUserInfo(
-//            @RequestBody UpdateInfoDTO updateInfoDTO,
-//            @RequestParam(value = "resume", required = false) MultipartFile resume,
-//            @RequestHeader("Authorization") String token) throws IOException {
-//        String userId = getUserIdFromToken(token);
-//
-//        // if (resume != null && !resume.isEmpty()) {
-//        // try {
-//        // Map<String, String> data = cloudinaryService.upload(resume);
-//        // String resumeUrl = data.get("url");
-//        // updateInfoDTO.setResume_url(resumeUrl);
-//        // } catch (Exception e) {
-//        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//        // .body("Failed to upload resume: " + e.getMessage());
-//        // }
-//        // }
-//
-//        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
-//        return ResponseEntity.ok(updatedUser);
-//    }
+    @PatchMapping("/update-info")
+    public ResponseEntity<?> updateUserInfo(
+            @RequestBody UpdateInfoDTO updateInfoDTO,
+            @RequestParam(value = "resume", required = false) MultipartFile resume,
+            @RequestHeader("Authorization") String token) throws IOException {
+        String userId = getUserIdFromToken(token);
 
-//    @PatchMapping("/update-avatar")
-//    public ResponseEntity<?> updateAvatar(
-//            @RequestParam("image") MultipartFile file,
-//            @RequestHeader("Authorization") String token) {
-//        String userId = getUserIdFromToken(token);
-//        Map<String, String> data = cloudinaryService.upload(file);
-//        String url = data.get("url");
-//        userService.updateAvatar(url, userId);
-//        return ResponseEntity.ok("Update avatar successfully");
-//    }
+        // if (resume != null && !resume.isEmpty()) {
+        // try {
+        // Map<String, String> data = cloudinaryService.upload(resume);
+        // String resumeUrl = data.get("url");
+        // updateInfoDTO.setResume_url(resumeUrl);
+        // } catch (Exception e) {
+        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        // .body("Failed to upload resume: " + e.getMessage());
+        // }
+        // }
 
-//    @PatchMapping("/update-resume")
-//    public ResponseEntity<?> updateResume(
-//            @RequestParam(value = "resume", required = false) MultipartFile resume,
-//            @RequestHeader("Authorization") String token) {
-//        String userId = getUserIdFromToken(token);
-//        Map<String, String> data = cloudinaryService.upload(resume);
-//        String url = data.get("url");
-//        userService.updateResume(url, userId);
-//        return ResponseEntity.ok("Update resume successfully");
-//    }
+        JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PatchMapping("/update-avatar")
+    public ResponseEntity<?> updateAvatar(
+            @RequestParam("image") MultipartFile file,
+            @RequestHeader("Authorization") String token) {
+        String userId = getUserIdFromToken(token);
+        Map<String, String> data = cloudinaryService.upload(file);
+        String url = data.get("url");
+        jobSeekerService.updateAvatar(url, userId);
+        return ResponseEntity.ok("Update avatar successfully");
+    }
+
+    @PatchMapping("/update-resume")
+    public ResponseEntity<?> updateResume(
+            @RequestParam(value = "resume", required = false) MultipartFile resume,
+            @RequestHeader("Authorization") String token) {
+        String userId = getUserIdFromToken(token);
+        Map<String, String> data = cloudinaryService.upload(resume);
+        String url = data.get("url");
+        jobSeekerService.updateResume(url, userId);
+        return ResponseEntity.ok("Update resume successfully");
+    }
 
     @DeleteMapping("/delete-account")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {

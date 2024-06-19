@@ -26,6 +26,7 @@ public class Enterprise {
     //
     private String headquarter;
     private String founded;
+    @Column(columnDefinition = "TEXT")
     private String companyStory;
     private Date created_at;
     private Date updated_at;

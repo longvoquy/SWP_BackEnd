@@ -18,9 +18,9 @@ public class JobSeekerServiceImpl implements JobSeekerService{
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
     
-    public JobSeeker updateInfo(UpdateInfoDTO body, String userId) throws IOException {
+    public JobSeeker updateInfo(UpdateInfoDTO body, String userId)  {
         int id = Integer.parseInt(userId);
-        JobSeeker user = jobSeekerRepository.findByJid(id);
+        JobSeeker user = jobSeekerRepository.findByUser_Uid(id);
         if (user == null) {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }

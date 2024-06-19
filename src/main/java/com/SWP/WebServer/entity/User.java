@@ -28,6 +28,7 @@ public class User {
     private Date updated_at;
     //
     private double account_balance;
+
     //
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
