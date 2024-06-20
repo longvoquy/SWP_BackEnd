@@ -86,6 +86,12 @@ public class JobSeekerServiceImpl implements JobSeekerService{
         jobSeekerRepository.save(jobSeeker);
     }
 
+    @Override
+    public JobSeeker getUserProfile(String userId) {
+        return jobSeekerRepository.
+                findByUser_Uid(Integer.parseInt(userId));
+    }
+
     public void updateContactInfo(
             ContactInfoDto body,
             String userId) {

@@ -3,6 +3,7 @@ package com.SWP.WebServer.controller;
 import com.SWP.WebServer.dto.*;
 import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.JobSeeker;
+import com.SWP.WebServer.entity.RoleType;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
@@ -11,7 +12,6 @@ import com.SWP.WebServer.token.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -99,7 +100,7 @@ public class UserController {
     }
 
     @GetMapping("/candidate-profile")
-    public User getProfile(@RequestHeader("Authorization") String token) {
+    public JobSeeker getProfile(@RequestHeader("Authorization") String token) {
         String userId = null;
         try {
             userId = jwtTokenProvider.verifyToken(token);
@@ -107,7 +108,13 @@ public class UserController {
             throw new ApiRequestException("expired_session", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        User user = userService.getUserProfile(userId);
+        JobSeeker jobSeeker = jobSeekerService.getUserProfile(userId);
+        return jobSeeker;
+    }
+
+    @GetMapping("/usertypes")
+    public List<RoleType> getAllUserType(){
+        List<RoleType> user = userService.getAllUserType();
         return user;
     }
 

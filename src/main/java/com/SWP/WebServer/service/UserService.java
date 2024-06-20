@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -78,6 +79,8 @@ public class UserService {
         if (userRepository.findByEmail(email) != null) {
             throw new ApiRequestException("Email already exist", HttpStatus.BAD_REQUEST);
         }
+        RoleType roleType = roleTypeRepository.findByRoleTypeId(roleTypeId)
+                .orElseThrow(() -> new ApiRequestException("Role type not found", HttpStatus.BAD_REQUEST));
         try {
             String htmlContent = emailTemplateService.getVerifyMailTemplate("Tap the button below to confirm your email address",
                     "Verify", email);
@@ -91,8 +94,6 @@ public class UserService {
                         user_name, email, password,
                         null, 0
                 ));
-        RoleType roleType = roleTypeRepository.findByRoleTypeId(roleTypeId)
-                .orElseThrow(() -> new ApiRequestException("Role type not found", HttpStatus.BAD_REQUEST));
 
         newUser.setRoleType(roleType);
 
@@ -211,6 +212,10 @@ public class UserService {
     public void deleteUser(String userId) {
         User user = userRepository.findByUid(Integer.parseInt(userId));
         userRepository.delete(user);
+    }
+
+    public List<RoleType> getAllUserType() {
+        return roleTypeRepository.findAll();
     }
 
 }

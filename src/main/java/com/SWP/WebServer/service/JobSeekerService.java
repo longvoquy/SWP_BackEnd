@@ -21,4 +21,6 @@ public interface JobSeekerService {
     void updateResume(
             String url,
             String userId);
+
+    JobSeeker getUserProfile(String userId);
 }
