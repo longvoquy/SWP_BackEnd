@@ -199,8 +199,12 @@ public class UserController {
     @DeleteMapping("/delete-account")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
-        userService.deleteUser(userId);
-        return ResponseEntity.ok("Delete User successfully");
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.ok("Delete User successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     private String getUserIdFromToken(String token) {

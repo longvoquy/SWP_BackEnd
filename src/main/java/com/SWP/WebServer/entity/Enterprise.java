@@ -32,7 +32,6 @@ public class Enterprise {
     private Date updated_at;
     //
     @ManyToOne(
-            cascade = CascadeType.ALL
     )
     @JoinColumn(
             name = "userId",

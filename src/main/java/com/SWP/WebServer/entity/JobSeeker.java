@@ -32,7 +32,6 @@ public class JobSeeker {
     private String dob;
     //
     @ManyToOne(
-            cascade = CascadeType.ALL
     )
     @JoinColumn(
             name = "userId",
@@ -40,6 +39,7 @@ public class JobSeeker {
     )
     private User user;
     //
+
     public JobSeeker(User user) {
         this.user = user;
         this.avatar_url = "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg";

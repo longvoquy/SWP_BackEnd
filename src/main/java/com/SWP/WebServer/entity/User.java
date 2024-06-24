@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "[User]")
@@ -30,14 +31,13 @@ public class User {
     private double account_balance;
 
     //
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne( )
     @JoinColumn(
             name = "user_role_id",
             referencedColumnName = "roleTypeId"
     )
     @JsonIgnoreProperties("userList") // Ignore userList property of RoleType during serialization
     private RoleType roleType;
-
 
 
     public User(

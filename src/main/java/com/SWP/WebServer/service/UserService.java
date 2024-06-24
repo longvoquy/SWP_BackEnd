@@ -11,10 +11,13 @@ import com.SWP.WebServer.repository.JobSeekerRepository;
 import com.SWP.WebServer.repository.RoleTypeRepository;
 import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.token.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Date;
@@ -151,7 +154,7 @@ public class UserService {
         }
         userRepository.save(
                 new
-                        User(user.getName(), user.getEmail().toLowerCase(), null,  user.getS_id(), 1));
+                        User(user.getName(), user.getEmail().toLowerCase(), null, user.getS_id(), 1));
         User createdUser = userRepository.findByGid(user.getS_id());
         return createdUser;
     }
@@ -209,8 +212,17 @@ public class UserService {
     }
 
 
+    @Transactional
     public void deleteUser(String userId) {
-        User user = userRepository.findByUid(Integer.parseInt(userId));
+        int id = Integer.parseInt(userId);
+        User user = userRepository.findByUid(id);
+        if(user.getRoleType().getRoleTypeId() == 1){
+            JobSeeker jobSeeker  = jobSeekerRepository.findByUser_Uid(id);
+            jobSeekerRepository.delete(jobSeeker);
+        }else{
+            Enterprise enterprise = enterpriseRepository.findByUser_Uid(id);
+            enterpriseRepository.delete(enterprise);
+        }
         userRepository.delete(user);
     }
 
